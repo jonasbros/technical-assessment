@@ -1,3 +1,6 @@
+"use client";
+
+import { useQuery } from "@tanstack/react-query";
 import { TableProperties } from "lucide-react";
 import {
   Table,
@@ -9,16 +12,18 @@ import {
 } from "@/components/ui/table";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { MetricsCardSkeleton } from "@/src/components/ui/card-skeleton";
+import { fetchMetrics, TimeRange, TimeSeriesData } from "@/api/mock-data";
 
-import { TimeRange, TimeSeriesData } from "@/api/mock-data";
+function DataGrid({ timeframe }: { timeframe: TimeRange }) {
+  const { data: chartData = [], isLoading } = useQuery<TimeSeriesData[]>({
+    queryKey: ["metrics", timeframe],
+    queryFn: () => fetchMetrics(timeframe),
+    refetchInterval: 5000,
+  });
 
-function DataGrid({
-  metrics,
-  timeframe,
-}: {
-  metrics: TimeSeriesData[];
-  timeframe: TimeRange;
-}) {
+  if (isLoading) return <MetricsCardSkeleton />;
+
   return (
     <Card className="w-full sm:max-w-sm mx-auto">
       <CardHeader>
@@ -37,15 +42,14 @@ function DataGrid({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {metrics.length &&
-                metrics.map((metric) => (
-                  <TableRow key={metric.timestamp}>
-                    <TableCell className="font-medium">
-                      {metric.timestamp}
-                    </TableCell>
-                    <TableCell className="text-right">{metric.value}</TableCell>
-                  </TableRow>
-                ))}
+              {chartData.map((metric) => (
+                <TableRow key={metric.timestamp}>
+                  <TableCell className="font-medium">
+                    {metric.timestamp}
+                  </TableCell>
+                  <TableCell className="text-right">{metric.value}</TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </div>
