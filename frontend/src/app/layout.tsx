@@ -15,10 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full" suppressHydrationWarning>
       <body className="bg-background text-foreground h-full">
-        <main className="container mx-auto min-h-screen lg:h-screen flex flex-col py-16">
-          <h1 className="text-4xl text-foreground text-center font-bold mb-8">
-            DASHBOARD
-          </h1>
+        <main className="container mx-auto min-h-screen lg:h-screen flex flex-col py-6">
           <Providers>{children}</Providers>
         </main>
       </body>
