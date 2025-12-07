@@ -15,9 +15,9 @@ import { MetricsCardSkeleton } from "@/src/components/ui/card-skeleton";
 import { fetchMetrics, TimeRange, TimeSeriesData } from "@/api/mock-data";
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "var(--chart-1)",
+  value: {
+    label: "Value",
+    color: "rgb(14 165 233)",
   },
 } satisfies ChartConfig;
 
@@ -32,7 +32,7 @@ function MetricsChart({ timeframe }: { timeframe: TimeRange }) {
   if (isLoading) return <MetricsCardSkeleton />;
 
   return (
-    <Card className="gap-4 lg:h-fit">
+    <Card className="bg-card text-card-foreground gap-4 shadow-sm lg:h-fit">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <TrendingUp />
@@ -69,9 +69,9 @@ function MetricsChart({ timeframe }: { timeframe: TimeRange }) {
             <Area
               dataKey="value"
               type="linear"
-              fill="var(--color-desktop)"
+              fill="var(--color-value)"
               fillOpacity={0.4}
-              stroke="var(--color-desktop)"
+              stroke="var(--color-value)"
             />
           </AreaChart>
         </ChartContainer>

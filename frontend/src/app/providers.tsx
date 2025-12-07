@@ -8,27 +8,30 @@ import {
 import { ErrorBoundary } from "react-error-boundary";
 
 import { ErrorFallback } from "@/src/components/ui/error-fallback";
+import { ThemeProvider } from "@/src/components/ui/theme-provider";
 
 const queryClient = new QueryClient();
 
 export function Providers({ children }) {
   return (
-    <QueryErrorResetBoundary>
-      {({ reset }) => (
-        <ErrorBoundary
-          onReset={reset}
-          fallbackRender={({ error, resetErrorBoundary }) => (
-            <ErrorFallback
-              error={error}
-              resetErrorBoundary={resetErrorBoundary}
-            />
-          )}
-        >
-          <QueryClientProvider client={queryClient}>
-            {children}
-          </QueryClientProvider>
-        </ErrorBoundary>
-      )}
-    </QueryErrorResetBoundary>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <QueryErrorResetBoundary>
+        {({ reset }) => (
+          <ErrorBoundary
+            onReset={reset}
+            fallbackRender={({ error, resetErrorBoundary }) => (
+              <ErrorFallback
+                error={error}
+                resetErrorBoundary={resetErrorBoundary}
+              />
+            )}
+          >
+            <QueryClientProvider client={queryClient}>
+              {children}
+            </QueryClientProvider>
+          </ErrorBoundary>
+        )}
+      </QueryErrorResetBoundary>
+    </ThemeProvider>
   );
 }

@@ -13,8 +13,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark h-full">
-      <body className="dark bg-background text-foreground h-full">
+    <html lang="en" className="h-full" suppressHydrationWarning>
+      <body className="bg-background text-foreground h-full">
         <main className="container mx-auto min-h-screen lg:h-screen flex flex-col py-16">
           <h1 className="text-4xl font-bold text-center mb-8">DASHBOARD</h1>
           <Providers>{children}</Providers>

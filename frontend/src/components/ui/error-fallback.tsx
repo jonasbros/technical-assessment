@@ -12,7 +12,7 @@ export function ErrorFallback({
   resetErrorBoundary,
 }: ErrorFallbackProps) {
   return (
-    <Card className="w-full max-w-sm mt-16 mx-auto border-destructive">
+    <Card className="bg-card text-card-foreground w-full max-w-sm mt-16 mx-auto border-destructive shadow-sm">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-destructive">
           <AlertTriangle className="h-5 w-5" />

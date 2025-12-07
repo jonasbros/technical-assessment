@@ -23,16 +23,20 @@ function StatusCards() {
 
   const statusConfig = {
     healthy: {
-      color: "text-green-600",
-      border: "border-green-600",
+      color: "text-green-600 dark:text-green-500",
+      border: "border-green-600 dark:border-green-500",
       icon: Activity,
     },
     warning: {
-      color: "text-yellow-500",
-      border: "border-yellow-500",
+      color: "text-yellow-500 dark:text-yellow-600",
+      border: "border-yellow-500 dark:border-yellow-600",
       icon: TriangleAlert,
     },
-    error: { color: "text-red-700", border: "border-red-700", icon: Bug },
+    error: {
+      color: "text-red-600 dark:text-red-500",
+      border: "border-red-600 dark:border-red-500",
+      icon: Bug,
+    },
   };
 
   if (isLoading)
@@ -49,7 +53,10 @@ function StatusCards() {
     const Icon = config.icon;
 
     return (
-      <Card key={id} className={`w-full mx-auto ${config.border}`}>
+      <Card
+        key={id}
+        className={`bg-card text-card-foreground w-full mx-auto ${config.border} shadow-sm`}
+      >
         <CardHeader>
           <CardTitle
             className={`flex items-center gap-2 uppercase ${config.color}`}
