@@ -4,9 +4,7 @@ module.exports = {
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
-  testMatch: ["<rootDir>/**/*.test.tsx", "<rootDir>/**/*.test.ts"],
   transform: {
     "^.+\\.(ts|tsx)$": "ts-jest",
   },
-  collectCoverageFrom: ["src/**/*.{ts,tsx}", "!src/**/*.d.ts"],
 };
