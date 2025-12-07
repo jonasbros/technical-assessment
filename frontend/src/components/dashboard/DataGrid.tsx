@@ -20,6 +20,7 @@ function DataGrid({ timeframe }: { timeframe: TimeRange }) {
     queryKey: ["metrics", timeframe],
     queryFn: () => fetchMetrics(timeframe),
     refetchInterval: 5000,
+    throwOnError: true,
   });
 
   if (isLoading) return <MetricsCardSkeleton />;

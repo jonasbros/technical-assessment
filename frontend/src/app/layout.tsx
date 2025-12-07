@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className="dark bg-background text-foreground">
-        <main className="container mx-auto pt-8">
+        <main className="container mx-auto pt-16">
           <h1 className="text-4xl font-bold text-center mb-8">DASHBOARD</h1>
           <Providers>{children}</Providers>
         </main>

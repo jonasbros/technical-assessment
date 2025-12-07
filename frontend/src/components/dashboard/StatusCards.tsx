@@ -18,6 +18,7 @@ function StatusCards() {
     queryKey: ["status"],
     queryFn: fetchStatus,
     refetchInterval: 5000,
+    throwOnError: true,
   });
 
   const statusConfig = {

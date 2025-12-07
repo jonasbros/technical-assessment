@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function StatusCardSkeleton() {
   return (
-    <Card className="w-full sm:max-w-sm mx-auto">
+    <Card className="w-full mx-auto">
       <CardHeader>
         <div className="flex items-center gap-2">
           <Skeleton className="h-5 w-5" />
