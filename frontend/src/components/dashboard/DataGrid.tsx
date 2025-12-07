@@ -25,7 +25,7 @@ function DataGrid({ timeframe }: { timeframe: TimeRange }) {
   if (isLoading) return <MetricsCardSkeleton />;
 
   return (
-    <Card className="w-full sm:max-w-sm mx-auto">
+    <Card className="w-full mx-auto">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 uppercase">
           <TableProperties />
@@ -33,7 +33,7 @@ function DataGrid({ timeframe }: { timeframe: TimeRange }) {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="max-h-[500px] overflow-y-auto">
+        <div className="max-h-[350px] overflow-y-auto">
           <Table>
             <TableHeader>
               <TableRow>

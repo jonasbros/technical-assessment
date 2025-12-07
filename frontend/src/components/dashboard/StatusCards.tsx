@@ -43,12 +43,12 @@ function StatusCards() {
       </>
     );
 
-  return statuses.map(({ status, message, timestamp }) => {
+  return statuses.map(({ id, status, message, timestamp }) => {
     const config = statusConfig[status] || statusConfig.error;
     const Icon = config.icon;
 
     return (
-      <Card className={`w-full sm:max-w-sm mx-auto ${config.border}`}>
+      <Card key={id} className={`w-full mx-auto ${config.border}`}>
         <CardHeader>
           <CardTitle
             className={`flex items-center gap-2 uppercase ${config.color}`}

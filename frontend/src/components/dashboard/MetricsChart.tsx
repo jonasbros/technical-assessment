@@ -31,7 +31,7 @@ function MetricsChart({ timeframe }: { timeframe: TimeRange }) {
   if (isLoading) return <MetricsCardSkeleton />;
 
   return (
-    <Card className="gap-4">
+    <Card className="gap-4 lg:h-fit">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <TrendingUp />
