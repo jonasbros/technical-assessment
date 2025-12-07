@@ -2,11 +2,15 @@
 import { useState } from "react";
 
 import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import { TimeRange } from "@/api/mock-data";
+import { DEFAULT_TIME_RANGE } from "@/lib/constants";
 
 function TimeFrameSelect({
   handleTimeframeChange,
@@ -15,24 +19,26 @@ function TimeFrameSelect({
   handleTimeframeChange: (timeframe: TimeRange) => void;
   className?: string;
 }) {
-  const [timeframe, setTimeframe] = useState<TimeRange>("day");
+  const [timeframe, setTimeframe] = useState<TimeRange>(DEFAULT_TIME_RANGE);
 
   return (
-    <div className={`w-fit ${className}`}>
-      <NativeSelect
+    <div className={`w-fit bg-card text-foreground ${className}`}>
+      <Select
         value={timeframe}
-        onChange={(e) => {
-          setTimeframe(e.target.value as TimeRange);
-          handleTimeframeChange(e.target.value as TimeRange);
+        onValueChange={(value: TimeRange) => {
+          setTimeframe(value);
+          handleTimeframeChange(value);
         }}
       >
-        <NativeSelectOption value="" disabled>
-          Select Timeframe
-        </NativeSelectOption>
-        <NativeSelectOption value="hour">Hour</NativeSelectOption>
-        <NativeSelectOption value="day">Day</NativeSelectOption>
-        <NativeSelectOption value="week">Week</NativeSelectOption>
-      </NativeSelect>
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Select Timeframe" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="hour">Hour</SelectItem>
+          <SelectItem value="day">Day</SelectItem>
+          <SelectItem value="week">Week</SelectItem>
+        </SelectContent>
+      </Select>
     </div>
   );
 }
