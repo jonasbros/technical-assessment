@@ -1,4 +1,5 @@
 import { dateTimeFormatter } from "@/lib/utils";
+import { DEFAULT_TIME_RANGE } from "@/lib/constants";
 
 export interface TimeSeriesData {
   timestamp: string;
@@ -15,7 +16,7 @@ export interface StatusUpdate {
 export type TimeRange = "hour" | "day" | "week";
 
 export async function fetchMetrics(
-  timeRange: TimeRange = "day"
+  timeRange: TimeRange = DEFAULT_TIME_RANGE
 ): Promise<TimeSeriesData[]> {
   // Simulate API delay
   await new Promise((resolve) => setTimeout(resolve, 500));

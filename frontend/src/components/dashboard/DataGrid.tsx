@@ -10,16 +10,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MetricsCardSkeleton } from "@/src/components/ui/card-skeleton";
 import { fetchMetrics, TimeRange, TimeSeriesData } from "@/api/mock-data";
+
+import { POLLING_INTERVAL } from "@/lib/constants";
 
 function DataGrid({ timeframe }: { timeframe: TimeRange }) {
   const { data: chartData = [], isLoading } = useQuery<TimeSeriesData[]>({
     queryKey: ["metrics", timeframe],
     queryFn: () => fetchMetrics(timeframe),
-    refetchInterval: 5000,
+    refetchInterval: POLLING_INTERVAL,
     throwOnError: true,
   });
 
@@ -28,7 +29,7 @@ function DataGrid({ timeframe }: { timeframe: TimeRange }) {
   return (
     <Card className="bg-card text-card-foreground w-full mx-auto shadow-sm">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 uppercase">
+        <CardTitle className="flex items-center gap-2">
           <TableProperties />
           Data Grid
         </CardTitle>

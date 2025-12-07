@@ -10,8 +10,10 @@ import {
 } from "@/src/components/dashboard";
 import { TimeRange } from "@/api/mock-data";
 
+import { DEFAULT_TIME_RANGE } from "@/lib/constants";
+
 export default function Dashboard() {
-  const [timeframe, setTimeframe] = useState<TimeRange>("day");
+  const [timeframe, setTimeframe] = useState<TimeRange>(DEFAULT_TIME_RANGE);
 
   return (
     <div className="dashboard-layout flex flex-col gap-4 pb-8">

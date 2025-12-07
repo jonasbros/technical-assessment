@@ -14,6 +14,8 @@ import { MetricsCardSkeleton } from "@/src/components/ui/card-skeleton";
 
 import { fetchMetrics, TimeRange, TimeSeriesData } from "@/api/mock-data";
 
+import { POLLING_INTERVAL } from "@/lib/constants";
+
 const chartConfig = {
   value: {
     label: "Value",
@@ -25,7 +27,7 @@ function MetricsChart({ timeframe }: { timeframe: TimeRange }) {
   const { data: chartData = [], isLoading } = useQuery<TimeSeriesData[]>({
     queryKey: ["metrics", timeframe],
     queryFn: () => fetchMetrics(timeframe),
-    refetchInterval: 5000,
+    refetchInterval: POLLING_INTERVAL,
     throwOnError: true,
   });
 
