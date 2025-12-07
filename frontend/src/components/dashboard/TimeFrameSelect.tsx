@@ -13,7 +13,7 @@ function TimeFrameSelect({
   className,
 }: {
   handleTimeframeChange: (timeframe: TimeRange) => void;
-  className: string;
+  className?: string;
 }) {
   const [timeframe, setTimeframe] = useState<TimeRange>("day");
 
