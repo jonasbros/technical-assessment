@@ -1,3 +1,5 @@
+import { dateTimeFormatter } from "@/lib/utils";
+
 export interface TimeSeriesData {
   timestamp: string;
   value: number;
@@ -10,8 +12,10 @@ export interface StatusUpdate {
   timestamp: string;
 }
 
+export type TimeRange = "hour" | "day" | "week";
+
 export async function fetchMetrics(
-  timeRange: "hour" | "day" | "week" = "day"
+  timeRange: TimeRange = "day"
 ): Promise<TimeSeriesData[]> {
   // Simulate API delay
   await new Promise((resolve) => setTimeout(resolve, 500));
@@ -43,19 +47,19 @@ export async function fetchStatus(): Promise<StatusUpdate[]> {
       id: "1",
       status: "healthy",
       message: "All systems operational",
-      timestamp: new Date(Date.now() - 300000).toISOString(), // 5 minutes ago
+      timestamp: dateTimeFormatter(new Date(Date.now() - 300000)), // 5 minutes ago
     },
     {
       id: "2",
       status: "warning",
       message: "High CPU utilization detected",
-      timestamp: new Date(Date.now() - 900000).toISOString(), // 15 minutes ago
+      timestamp: dateTimeFormatter(new Date(Date.now() - 900000)), // 15 minutes ago
     },
     {
       id: "3",
       status: "error",
       message: "Database connection timeout",
-      timestamp: new Date(Date.now() - 1800000).toISOString(), // 30 minutes ago
+      timestamp: dateTimeFormatter(new Date(Date.now() - 1800000)), // 30 minutes ago
     },
   ];
 }
