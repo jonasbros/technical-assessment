@@ -1,5 +1,7 @@
 "use client";
 
+import { useState, useEffect } from "react";
+
 import { TrendingUp } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
@@ -20,22 +22,17 @@ import {
 } from "@/components/ui/chart";
 
 import {
+  NativeSelect,
+  NativeSelectOption,
+} from "@/components/ui/native-select";
+
+import {
   fetchMetrics,
   fetchStatus,
   StatusUpdate,
   TimeSeriesData,
+  TimeRange,
 } from "@/api/mock-data";
-
-export const description = "A linear area chart";
-
-const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
-];
 
 const chartConfig = {
   desktop: {
@@ -44,16 +41,57 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-function MetricsChart({}) {
+function MetricsChart() {
+  const [chartData, setChartData] = useState<TimeSeriesData[]>([]);
+  const [timeframe, setTimeframe] = useState<TimeRange>("day");
+
+  // instantly fetch metrics on select change
+  useEffect(() => {
+    const getInitialMetrics = async () => {
+      const initialMetrics = await fetchMetrics(timeframe);
+      setChartData(initialMetrics);
+    };
+    getInitialMetrics();
+  }, [timeframe]);
+
+  // polling for fetching metrics
+  useEffect(() => {
+    const fetchChartData = async () => {
+      const metrics = await fetchMetrics(timeframe);
+
+      setChartData(metrics);
+    };
+
+    const pollInterval = setInterval(() => {
+      fetchChartData();
+    }, 5000);
+
+    return () => clearInterval(pollInterval);
+  }, [timeframe]);
+
   return (
-    <Card>
+    <Card className="gap-4">
       <CardHeader>
-        <CardTitle>Area Chart - Linear</CardTitle>
-        <CardDescription>
-          Showing total visitors for the last 6 months
-        </CardDescription>
+        <CardTitle className="flex items-center gap-2">
+          <TrendingUp />
+          Metrics Data
+        </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex flex-col gap-4">
+        <div className="ml-auto">
+          <NativeSelect
+            value={timeframe}
+            onChange={(e) => setTimeframe(e.target.value as TimeRange)}
+          >
+            <NativeSelectOption value="" disabled>
+              Select Timeframe
+            </NativeSelectOption>
+            <NativeSelectOption value="hour">Hour</NativeSelectOption>
+            <NativeSelectOption value="day">Day</NativeSelectOption>
+            <NativeSelectOption value="week">Week</NativeSelectOption>
+          </NativeSelect>
+        </div>
+
         <ChartContainer config={chartConfig}>
           <AreaChart
             accessibilityLayer
@@ -65,18 +103,23 @@ function MetricsChart({}) {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="timestamp"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
+              tickFormatter={(value) => {
+                const date = new Date(value);
+                if (timeframe === "hour") return date.toLocaleTimeString();
+                if (timeframe === "day") return date.toLocaleDateString();
+                return `${date.getMonth() + 1}/${date.getDate()}`;
+              }}
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent indicator="dot" hideLabel />}
             />
             <Area
-              dataKey="desktop"
+              dataKey="value"
               type="linear"
               fill="var(--color-desktop)"
               fillOpacity={0.4}
@@ -85,18 +128,6 @@ function MetricsChart({}) {
           </AreaChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter>
-        <div className="flex w-full items-start gap-2 text-sm">
-          <div className="grid gap-2">
-            <div className="flex items-center gap-2 leading-none font-medium">
-              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-            </div>
-            <div className="text-muted-foreground flex items-center gap-2 leading-none">
-              January - June 2024
-            </div>
-          </div>
-        </div>
-      </CardFooter>
     </Card>
   );
 }
