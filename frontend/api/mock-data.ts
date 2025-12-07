@@ -17,7 +17,6 @@ export type TimeRange = "hour" | "day" | "week";
 export async function fetchMetrics(
   timeRange: TimeRange = "day"
 ): Promise<TimeSeriesData[]> {
-  throw new Error("Network request failed");
   // Simulate API delay
   await new Promise((resolve) => setTimeout(resolve, 500));
 
@@ -40,7 +39,6 @@ export async function fetchMetrics(
 }
 
 export async function fetchStatus(): Promise<StatusUpdate[]> {
-  throw new Error("Network request failed");
   // Simulate API delay
   await new Promise((resolve) => setTimeout(resolve, 500));
 
