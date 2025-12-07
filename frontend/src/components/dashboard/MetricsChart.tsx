@@ -1,18 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { TrendingUp } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import {
   ChartConfig,
@@ -26,13 +19,7 @@ import {
   NativeSelectOption,
 } from "@/components/ui/native-select";
 
-import {
-  fetchMetrics,
-  fetchStatus,
-  StatusUpdate,
-  TimeSeriesData,
-  TimeRange,
-} from "@/api/mock-data";
+import { TimeRange, TimeSeriesData } from "@/api/mock-data";
 
 const chartConfig = {
   desktop: {
@@ -41,33 +28,14 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-function MetricsChart() {
-  const [chartData, setChartData] = useState<TimeSeriesData[]>([]);
+function MetricsChart({
+  chartData,
+  handleTimeframe,
+}: {
+  chartData: TimeSeriesData[];
+  handleTimeframe: (timeframe: TimeRange) => void;
+}) {
   const [timeframe, setTimeframe] = useState<TimeRange>("day");
-
-  // instantly fetch metrics on select change
-  useEffect(() => {
-    const getInitialMetrics = async () => {
-      const initialMetrics = await fetchMetrics(timeframe);
-      setChartData(initialMetrics);
-    };
-    getInitialMetrics();
-  }, [timeframe]);
-
-  // polling for fetching metrics
-  useEffect(() => {
-    const fetchChartData = async () => {
-      const metrics = await fetchMetrics(timeframe);
-
-      setChartData(metrics);
-    };
-
-    const pollInterval = setInterval(() => {
-      fetchChartData();
-    }, 5000);
-
-    return () => clearInterval(pollInterval);
-  }, [timeframe]);
 
   return (
     <Card className="gap-4">
@@ -81,7 +49,10 @@ function MetricsChart() {
         <div className="ml-auto">
           <NativeSelect
             value={timeframe}
-            onChange={(e) => setTimeframe(e.target.value as TimeRange)}
+            onChange={(e) => {
+              setTimeframe(e.target.value as TimeRange);
+              handleTimeframe(e.target.value as TimeRange);
+            }}
           >
             <NativeSelectOption value="" disabled>
               Select Timeframe

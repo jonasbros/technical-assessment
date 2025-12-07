@@ -1,4 +1,6 @@
-import { Suspense } from "react";
+"use client";
+
+import { useState, useEffect, useCallback, Suspense } from "react";
 import {
   MetricsChart,
   DataGrid,
@@ -11,13 +13,49 @@ import {
   fetchStatus,
   StatusUpdate,
   TimeSeriesData,
+  TimeRange,
 } from "@/api/mock-data";
 
-export default async function Dashboard() {
-  const [metrics, statuses]: [TimeSeriesData[], StatusUpdate[]] =
-    await Promise.all([fetchMetrics(), fetchStatus()]);
+export default function Dashboard() {
+  const [chartData, setChartData] = useState<TimeSeriesData[]>([]);
+  const [statuses, setStatuses] = useState<StatusUpdate[]>([]);
+  const [timeframe, setTimeframe] = useState<TimeRange>("day");
 
-  console.log(metrics);
+  const handleTimeframe = useCallback((timeframe: TimeRange) => {
+    setTimeframe(timeframe);
+  }, []);
+
+  const fetchData = async () => {
+    const [metrics, _statuses]: [TimeSeriesData[], StatusUpdate[]] =
+      await Promise.all([fetchMetrics("day"), fetchStatus()]);
+
+    setChartData(metrics);
+    setStatuses(_statuses);
+  };
+
+  // fetch data on page load
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // fetch metrics on timeframe change
+  useEffect(() => {
+    const fetchChartData = async () => {
+      const metrics = await fetchMetrics(timeframe);
+      setChartData(metrics);
+    };
+    fetchChartData();
+  }, [timeframe]);
+
+  // polling for fetching both metrics and status
+  useEffect(() => {
+    const pollInterval = setInterval(() => {
+      fetchData();
+    }, 5000);
+
+    return () => clearInterval(pollInterval);
+  }, [timeframe]);
+
   return (
     <div className="dashboard-layout">
       <Suspense fallback={<Loading />}>
@@ -37,7 +75,12 @@ export default async function Dashboard() {
             {/* Main content grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <div className="lg:col-span-2">
-                <MetricsChart chartData={metrics} />
+                {statuses.length && (
+                  <MetricsChart
+                    chartData={chartData}
+                    handleTimeframe={handleTimeframe}
+                  />
+                )}
               </div>
               <div className="lg:col-span-1">
                 <DataGrid />
