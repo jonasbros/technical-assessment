@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 import { TrendingUp } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
@@ -14,11 +12,6 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
-
 import { TimeRange, TimeSeriesData } from "@/api/mock-data";
 
 const chartConfig = {
@@ -30,13 +23,11 @@ const chartConfig = {
 
 function MetricsChart({
   chartData,
-  handleTimeframe,
+  timeframe,
 }: {
   chartData: TimeSeriesData[];
-  handleTimeframe: (timeframe: TimeRange) => void;
+  timeframe: TimeRange;
 }) {
-  const [timeframe, setTimeframe] = useState<TimeRange>("day");
-
   return (
     <Card className="gap-4">
       <CardHeader>
@@ -46,23 +37,6 @@ function MetricsChart({
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
-        <div className="ml-auto">
-          <NativeSelect
-            value={timeframe}
-            onChange={(e) => {
-              setTimeframe(e.target.value as TimeRange);
-              handleTimeframe(e.target.value as TimeRange);
-            }}
-          >
-            <NativeSelectOption value="" disabled>
-              Select Timeframe
-            </NativeSelectOption>
-            <NativeSelectOption value="hour">Hour</NativeSelectOption>
-            <NativeSelectOption value="day">Day</NativeSelectOption>
-            <NativeSelectOption value="week">Week</NativeSelectOption>
-          </NativeSelect>
-        </div>
-
         <ChartContainer config={chartConfig}>
           <AreaChart
             accessibilityLayer
