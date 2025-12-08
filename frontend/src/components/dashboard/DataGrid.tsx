@@ -69,17 +69,26 @@ function DataGrid({ timeframe }: { timeframe: TimeRange }) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredData.map((metric) => (
-                <TableRow
-                  key={metric.timestamp}
-                  className="data-grid__data-row"
-                >
+              {!filteredData.length ? (
+                <TableRow className="data-grid__data-row">
                   <TableCell className="font-medium">
-                    {dateTimeFormatter(new Date(metric.timestamp))}
+                    No Results Found.
                   </TableCell>
-                  <TableCell className="text-right">{metric.value}</TableCell>
+                  <TableCell className="text-right"></TableCell>
                 </TableRow>
-              ))}
+              ) : (
+                filteredData.map((metric) => (
+                  <TableRow
+                    key={metric.timestamp}
+                    className="data-grid__data-row"
+                  >
+                    <TableCell className="font-medium">
+                      {dateTimeFormatter(new Date(metric.timestamp))}
+                    </TableCell>
+                    <TableCell className="text-right">{metric.value}</TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </div>
