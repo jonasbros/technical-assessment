@@ -14,7 +14,12 @@ const queryClient = new QueryClient();
 
 export function Providers({ children }) {
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem={true}
+      storageKey="theme"
+    >
       <QueryErrorResetBoundary>
         {({ reset }) => (
           <ErrorBoundary

@@ -1,40 +1,46 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import * as React from "react";
+import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
+
+import { Button } from "@/components/ui/button";
 
 export default function ThemeSwitch() {
-  const { theme, setTheme, resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const { setTheme, theme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     setMounted(true);
   }, []);
 
   if (!mounted) {
     return (
-      <div className="flex items-center space-x-2">
-        <div className="w-11 h-6 bg-muted rounded-full"></div>
-        <Label>Auto Mode</Label>
-      </div>
+      <Button variant="outline" size="icon" disabled>
+        <div className="h-[1.2rem] w-[1.2rem] rounded-full bg-muted animate-pulse" />
+        <span className="sr-only">Loading theme</span>
+      </Button>
     );
   }
 
-  const isDark = resolvedTheme === "dark";
+  const toggleTheme = () => {
+    if (theme === "system") {
+      setTheme(resolvedTheme === "dark" ? "light" : "dark");
+    } else {
+      setTheme(theme === "light" ? "dark" : "light");
+    }
+  };
 
   return (
-    <div className="flex items-center space-x-2">
-      <Switch
-        id="theme-switch"
-        checked={isDark}
-        onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
-        className="cursor-pointer"
-      />
-      <Label htmlFor="theme-switch" className="cursor-pointer">
-        {theme === "system" ? `Auto (${resolvedTheme})` : "Dark Mode"}
-      </Label>
-    </div>
+    <Button
+      variant="outline"
+      size="icon"
+      onClick={toggleTheme}
+      aria-label="Toggle theme"
+    >
+      <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+      <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+      <span className="sr-only">Toggle theme</span>
+    </Button>
   );
 }
