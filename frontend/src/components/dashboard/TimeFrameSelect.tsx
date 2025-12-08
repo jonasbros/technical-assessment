@@ -12,7 +12,7 @@ import {
 import { TimeRange } from "@/api/mock-data";
 import { DEFAULT_TIME_RANGE } from "@/lib/constants";
 
-function TimeFrameSelect({
+export default function TimeFrameSelect({
   handleTimeframeChange,
   className,
 }: {
@@ -43,5 +43,3 @@ function TimeFrameSelect({
     </div>
   );
 }
-
-export default TimeFrameSelect;

@@ -12,7 +12,7 @@ import { ThemeProvider } from "@/src/components/ui/theme-provider";
 
 const queryClient = new QueryClient();
 
-export function Providers({ children }) {
+export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider
       attribute="class"

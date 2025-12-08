@@ -23,7 +23,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-function MetricsChart({ timeframe }: { timeframe: TimeRange }) {
+export default function MetricsChart({ timeframe }: { timeframe: TimeRange }) {
   const { data: chartData = [], isLoading } = useQuery<TimeSeriesData[]>({
     queryKey: ["metrics", timeframe],
     queryFn: () => fetchMetrics(timeframe),
@@ -82,5 +82,3 @@ function MetricsChart({ timeframe }: { timeframe: TimeRange }) {
     </Card>
   );
 }
-
-export default MetricsChart;

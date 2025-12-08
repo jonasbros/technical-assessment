@@ -22,10 +22,15 @@ export default function Dashboard() {
   });
 
   // PROFILER CALLBACK
-  function onRenderCallback(id, phase, actualDuration, baseDuration) {
+  function onRenderCallback(
+    id: string,
+    phase: "mount" | "update",
+    actualDuration: number,
+    baseDuration: number
+  ) {
     console.log("Performance:", {
       component: id,
-      phase, // "mount" or "update"
+      phase,
       actualDuration, // Time spent rendering
       baseDuration, // Estimated time without memoization
     });
