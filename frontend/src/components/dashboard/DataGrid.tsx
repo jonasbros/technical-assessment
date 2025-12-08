@@ -48,24 +48,26 @@ function DataGrid({ timeframe }: { timeframe: TimeRange }) {
     <Card className="bg-card text-card-foreground w-full mx-auto shadow-sm">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <TableProperties />
+          <TableProperties aria-hidden="true" />
           Data Grid
         </CardTitle>
       </CardHeader>
       <CardContent>
         <Input
+          aria-label="Search Input"
           type="text"
           placeholder="Search"
           className="w-1/2 mb-4"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <div className="max-h-[350px] overflow-y-auto">
-          <Table>
+
+        <div className="max-h-[350px] overflow-y-auto" role="region" aria-label="Data table">
+          <Table aria-label="Metrics data table">
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[100px]">Date / Time</TableHead>
-                <TableHead className="text-right">Value</TableHead>
+                <TableHead className="w-[100px]" scope="col">Date / Time</TableHead>
+                <TableHead className="text-right" scope="col">Value</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

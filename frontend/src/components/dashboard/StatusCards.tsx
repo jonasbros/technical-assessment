@@ -54,6 +54,8 @@ function StatusCards() {
     const Icon = config.icon;
     return (
       <Card
+        role="status"
+        aria-label={`${status} status: ${message}`}
         key={id}
         className={`bg-card text-card-foreground w-full mx-auto ${config.border} shadow-sm`}
       >
@@ -61,7 +63,7 @@ function StatusCards() {
           <CardTitle
             className={`flex items-center gap-2 uppercase ${config.color}`}
           >
-            <Icon />
+            <Icon aria-hidden="true" />
             {status}
           </CardTitle>
           <CardDescription>{timestamp}</CardDescription>

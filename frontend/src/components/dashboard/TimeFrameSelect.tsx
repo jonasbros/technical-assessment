@@ -24,6 +24,7 @@ function TimeFrameSelect({
   return (
     <div className={`w-fit bg-card text-foreground ${className}`}>
       <Select
+        aria-label="Timeframe select"
         value={timeframe}
         onValueChange={(value: TimeRange) => {
           setTimeframe(value);

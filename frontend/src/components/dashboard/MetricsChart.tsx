@@ -37,7 +37,7 @@ function MetricsChart({ timeframe }: { timeframe: TimeRange }) {
     <Card className="bg-card text-card-foreground gap-4 shadow-sm lg:h-fit">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <TrendingUp />
+          <TrendingUp aria-hidden="true" />
           Metrics Data
         </CardTitle>
       </CardHeader>
@@ -45,6 +45,7 @@ function MetricsChart({ timeframe }: { timeframe: TimeRange }) {
         <ChartContainer config={chartConfig}>
           <AreaChart
             accessibilityLayer
+            aria-label="Area chart showing metrics data over time"
             data={chartData}
             margin={{
               left: 12,
