@@ -130,7 +130,7 @@ describe("DataGrid", () => {
 
       await waitFor(() => {
         expect(screen.getByRole("alert")).toBeInTheDocument();
-        expect(screen.getByText(/Something went wrong/)).toBeInTheDocument();
+        expect(screen.getByText(/Failed to load data/)).toBeInTheDocument();
       });
     });
 
