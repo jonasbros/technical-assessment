@@ -3,15 +3,8 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { TableProperties } from "lucide-react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
+import { SearchInput } from "@/src/components/ui/search-input";
+import { MetricsTable } from "@/src/components/ui/metrics-table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MetricsCardSkeleton } from "@/src/components/ui/card-skeleton";
 
@@ -55,13 +48,10 @@ export default function DataGrid({ timeframe }: { timeframe: TimeRange }) {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <Input
-          aria-label="Search Input"
-          type="text"
-          placeholder="Search"
-          className="w-1/2 mb-4"
+        <SearchInput
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={setSearchTerm}
+          placeholder="Search"
         />
 
         <div aria-live="polite" aria-atomic="true" className="sr-only">
@@ -70,46 +60,7 @@ export default function DataGrid({ timeframe }: { timeframe: TimeRange }) {
             : `${filteredData.length} total results`}
         </div>
 
-        <div
-          className="max-h-[350px] overflow-y-auto"
-          role="region"
-          aria-label="Data table"
-        >
-          <Table aria-label="Metrics data table">
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[100px]" scope="col">
-                  Date / Time
-                </TableHead>
-                <TableHead className="text-right" scope="col">
-                  Value
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {!filteredData.length ? (
-                <TableRow className="data-grid__data-row">
-                  <TableCell className="font-medium">
-                    No Results Found.
-                  </TableCell>
-                  <TableCell className="text-right"></TableCell>
-                </TableRow>
-              ) : (
-                filteredData.map((metric) => (
-                  <TableRow
-                    key={metric.timestamp}
-                    className="data-grid__data-row"
-                  >
-                    <TableCell className="font-medium">
-                      {dateTimeFormatter(new Date(metric.timestamp))}
-                    </TableCell>
-                    <TableCell className="text-right">{metric.value}</TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </div>
+        <MetricsTable data={filteredData} />
       </CardContent>
     </Card>
   );
