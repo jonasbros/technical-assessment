@@ -33,7 +33,7 @@ export default function Dashboard() {
 
   return (
     <Profiler id="Dashboard" onRender={onRenderCallback}>
-      <div className="dashboard-layout flex flex-col gap-4 pb-8">
+      <div className="dashboard-layout flex flex-col gap-4 pb-8 px-6">
         <div className="flex justify-between">
           <TimeFrameSelect handleTimeframeChange={setTimeframe} />
           <ThemeSwitch />
