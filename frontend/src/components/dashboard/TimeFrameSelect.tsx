@@ -34,9 +34,9 @@ function TimeFrameSelect({
           <SelectValue placeholder="Select Timeframe" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="hour">Hour</SelectItem>
-          <SelectItem value="day">Day</SelectItem>
-          <SelectItem value="week">Week</SelectItem>
+          <SelectItem value="hour">Last Hour</SelectItem>
+          <SelectItem value="day">Last 24 Hours</SelectItem>
+          <SelectItem value="week">Last 7 Days</SelectItem>
         </SelectContent>
       </Select>
     </div>
