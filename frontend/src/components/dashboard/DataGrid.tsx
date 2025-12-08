@@ -61,6 +61,10 @@ function DataGrid({ timeframe }: { timeframe: TimeRange }) {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+        
+        <div aria-live="polite" aria-atomic="true" className="sr-only">
+          {debouncedSearchTerm ? `${filteredData.length} results found for "${debouncedSearchTerm}"` : `${filteredData.length} total results`}
+        </div>
 
         <div className="max-h-[350px] overflow-y-auto" role="region" aria-label="Data table">
           <Table aria-label="Metrics data table">
