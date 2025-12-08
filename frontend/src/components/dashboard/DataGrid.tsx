@@ -7,6 +7,7 @@ import { SearchInput } from "@/src/components/ui/search-input";
 import { MetricsTable } from "@/src/components/ui/metrics-table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MetricsCardSkeleton } from "@/src/components/ui/card-skeleton";
+import { InlineError } from "@/src/components/ui/inline-error";
 
 import { fetchMetrics, TimeRange, TimeSeriesData } from "@/api/mock-data";
 
@@ -16,11 +17,11 @@ import { dateTimeFormatter } from "@/lib/utils";
 import { useDebounce } from "@/src/hooks/useDebounce";
 
 export default function DataGrid({ timeframe }: { timeframe: TimeRange }) {
-  const { data: chartData = [], isLoading } = useQuery<TimeSeriesData[]>({
+  const { data: chartData = [], isLoading, error, isError, refetch } = useQuery<TimeSeriesData[]>({
     queryKey: ["metrics", timeframe],
     queryFn: () => fetchMetrics(timeframe),
+    select: (res) => res ?? [],
     refetchInterval: POLLING_INTERVAL,
-    throwOnError: true,
   });
 
   const DEBOUNCE_DELAY = 500;
@@ -29,6 +30,10 @@ export default function DataGrid({ timeframe }: { timeframe: TimeRange }) {
   const debouncedSearchTerm = useDebounce(searchTerm, DEBOUNCE_DELAY);
 
   if (isLoading) return <MetricsCardSkeleton />;
+  
+  if (isError) {
+    return <InlineError error={error} onRetry={() => refetch()} title="Failed to load data" />;
+  }
 
   const filteredData = chartData.filter(
     (metric) =>

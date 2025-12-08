@@ -11,14 +11,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { StatusCardSkeleton } from "@/src/components/ui/card-skeleton";
+import { InlineError } from "@/src/components/ui/inline-error";
 
 import { fetchStatus, StatusUpdate } from "@/api/mock-data";
 
 export default function StatusCards() {
-  const { data: statuses = [], isLoading } = useQuery<StatusUpdate[]>({
+  const { data: statuses = [], isLoading, error, isError, refetch } = useQuery<StatusUpdate[]>({
     queryKey: ["status"],
     queryFn: fetchStatus,
-    throwOnError: true,
+    select: (res) => res ?? [],
   });
 
   const STATUS_CONFIG = useMemo(
@@ -50,6 +51,10 @@ export default function StatusCards() {
         <StatusCardSkeleton />
       </>
     );
+
+  if (isError) {
+    return <InlineError error={error} onRetry={() => refetch()} title="Failed to load status" />;
+  }
 
   return statuses.map(({ id, status, message, timestamp }) => {
     const config = STATUS_CONFIG[status] || STATUS_CONFIG.error;

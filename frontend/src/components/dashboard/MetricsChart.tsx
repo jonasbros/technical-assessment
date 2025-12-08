@@ -11,6 +11,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { MetricsCardSkeleton } from "@/src/components/ui/card-skeleton";
+import { InlineError } from "@/src/components/ui/inline-error";
 
 import { fetchMetrics, TimeRange, TimeSeriesData } from "@/api/mock-data";
 
@@ -24,14 +25,18 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export default function MetricsChart({ timeframe }: { timeframe: TimeRange }) {
-  const { data: chartData = [], isLoading } = useQuery<TimeSeriesData[]>({
+  const { data: chartData = [], isLoading, error, isError, refetch } = useQuery<TimeSeriesData[]>({
     queryKey: ["metrics", timeframe],
     queryFn: () => fetchMetrics(timeframe),
+    select: (res) => res ?? [],
     refetchInterval: POLLING_INTERVAL,
-    throwOnError: true,
   });
 
   if (isLoading) return <MetricsCardSkeleton />;
+  
+  if (isError) {
+    return <InlineError error={error} onRetry={() => refetch()} title="Failed to load chart" />;
+  }
 
   return (
     <Card className="bg-card text-card-foreground gap-4 shadow-sm lg:h-fit">
