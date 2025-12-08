@@ -88,7 +88,28 @@ describe("DataGrid", () => {
       expect(screen.getByText("Value")).toBeInTheDocument();
     });
 
-    const tableRows = document.querySelector(".data-grid__data-row");
-    expect(tableRows).toBeNull();
+    expect(screen.getByText("No Results Found.")).toBeInTheDocument();
+  });
+
+  it("shows 'No Results Found' when search returns no matches", async () => {
+    const mockData = [
+      { timestamp: "2023-01-01T00:00:00Z", value: 75 },
+      { timestamp: "2023-01-01T01:00:00Z", value: 85 },
+    ];
+
+    mockFetchMetrics.mockResolvedValue(mockData);
+    render(<DataGrid timeframe={TIMEFRAME} />, { wrapper: TestWrapper });
+
+    await waitFor(() => expect(screen.getByText("75")).toBeInTheDocument());
+
+    // Search for something that doesn't exist
+    const searchInput = screen.getByPlaceholderText("Search");
+    fireEvent.change(searchInput, { target: { value: "999" } });
+
+    await waitFor(() => {
+      expect(screen.getByText("No Results Found.")).toBeInTheDocument();
+      expect(screen.queryByText("75")).not.toBeInTheDocument();
+      expect(screen.queryByText("85")).not.toBeInTheDocument();
+    });
   });
 });
