@@ -112,4 +112,82 @@ describe("DataGrid", () => {
       expect(screen.queryByText("85")).not.toBeInTheDocument();
     });
   });
+
+  describe("Network Failure Edge Cases", () => {
+    beforeEach(() => {
+      jest.spyOn(console, "error").mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it("handles API server errors gracefully", async () => {
+      const serverError = new Error("HTTP 500: Internal Server Error");
+      mockFetchMetrics.mockRejectedValue(serverError);
+
+      render(<DataGrid timeframe={TIMEFRAME} />, { wrapper: TestWrapper });
+
+      await waitFor(() => {
+        expect(screen.getByRole("alert")).toBeInTheDocument();
+        expect(screen.getByText(/Something went wrong/)).toBeInTheDocument();
+      });
+    });
+
+    it("handles network disconnection", async () => {
+      const networkError = new Error("Failed to fetch");
+      networkError.name = "TypeError";
+      mockFetchMetrics.mockRejectedValue(networkError);
+
+      render(<DataGrid timeframe={TIMEFRAME} />, { wrapper: TestWrapper });
+
+      await waitFor(() => {
+        expect(screen.getByRole("alert")).toBeInTheDocument();
+      });
+    });
+
+    it("handles malformed JSON response", async () => {
+      const jsonError = new SyntaxError("Unexpected token < in JSON at position 0");
+      mockFetchMetrics.mockRejectedValue(jsonError);
+
+      render(<DataGrid timeframe={TIMEFRAME} />, { wrapper: TestWrapper });
+
+      await waitFor(() => {
+        expect(screen.getByRole("alert")).toBeInTheDocument();
+      });
+    });
+
+    it("handles empty/null response gracefully", async () => {
+      mockFetchMetrics.mockResolvedValue(null);
+
+      render(<DataGrid timeframe={TIMEFRAME} />, { wrapper: TestWrapper });
+
+      await waitFor(() => {
+        expect(screen.getByText("No Results Found.")).toBeInTheDocument();
+      });
+    });
+
+    it("handles request timeout", async () => {
+      const timeoutError = new Error("Request timeout");
+      timeoutError.name = "TimeoutError";
+      mockFetchMetrics.mockRejectedValue(timeoutError);
+
+      render(<DataGrid timeframe={TIMEFRAME} />, { wrapper: TestWrapper });
+
+      await waitFor(() => {
+        expect(screen.getByRole("alert")).toBeInTheDocument();
+      });
+    });
+
+    it("handles rate limiting gracefully", async () => {
+      const rateLimitError = new Error("HTTP 429: Too Many Requests");
+      mockFetchMetrics.mockRejectedValue(rateLimitError);
+
+      render(<DataGrid timeframe={TIMEFRAME} />, { wrapper: TestWrapper });
+
+      await waitFor(() => {
+        expect(screen.getByRole("alert")).toBeInTheDocument();
+      });
+    });
+  });
 });

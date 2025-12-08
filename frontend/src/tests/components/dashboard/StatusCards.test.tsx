@@ -57,4 +57,82 @@ describe("StatusCards", () => {
 
     expect(screen.getByText("healthy")).toHaveClass("text-green-600");
   });
+
+  describe("Network Failure Edge Cases", () => {
+    beforeEach(() => {
+      jest.spyOn(console, "error").mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it("handles 500 server errors gracefully", async () => {
+      const serverError = new Error("HTTP 500: Internal Server Error");
+      mockFetchStatus.mockRejectedValue(serverError);
+
+      render(<StatusCards />, { wrapper: TestWrapper });
+
+      await waitFor(() => {
+        expect(screen.getByRole("alert")).toBeInTheDocument();
+        expect(screen.getByText(/Something went wrong/)).toBeInTheDocument();
+      });
+    });
+
+    it("handles network connection failures", async () => {
+      const networkError = new Error("Failed to fetch");
+      networkError.name = "TypeError";
+      mockFetchStatus.mockRejectedValue(networkError);
+
+      render(<StatusCards />, { wrapper: TestWrapper });
+
+      await waitFor(() => {
+        expect(screen.getByRole("alert")).toBeInTheDocument();
+      });
+    });
+
+    it("handles malformed JSON responses", async () => {
+      const jsonError = new SyntaxError("Unexpected token < in JSON at position 0");
+      mockFetchStatus.mockRejectedValue(jsonError);
+
+      render(<StatusCards />, { wrapper: TestWrapper });
+
+      await waitFor(() => {
+        expect(screen.getByRole("alert")).toBeInTheDocument();
+      });
+    });
+
+    it("handles 429 rate limiting errors", async () => {
+      const rateLimitError = new Error("HTTP 429: Too Many Requests");
+      mockFetchStatus.mockRejectedValue(rateLimitError);
+
+      render(<StatusCards />, { wrapper: TestWrapper });
+
+      await waitFor(() => {
+        expect(screen.getByRole("alert")).toBeInTheDocument();
+      });
+    });
+
+    it("handles empty response gracefully", async () => {
+      mockFetchStatus.mockResolvedValue(null);
+
+      render(<StatusCards />, { wrapper: TestWrapper });
+
+      await waitFor(() => {
+        // Should not crash, component should handle null gracefully
+        expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+      });
+    });
+
+    it("handles CORS errors", async () => {
+      const corsError = new Error("CORS policy: No 'Access-Control-Allow-Origin' header");
+      mockFetchStatus.mockRejectedValue(corsError);
+
+      render(<StatusCards />, { wrapper: TestWrapper });
+
+      await waitFor(() => {
+        expect(screen.getByRole("alert")).toBeInTheDocument();
+      });
+    });
+  });
 });
