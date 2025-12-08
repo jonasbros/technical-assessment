@@ -70,7 +70,10 @@ function DataGrid({ timeframe }: { timeframe: TimeRange }) {
             </TableHeader>
             <TableBody>
               {filteredData.map((metric) => (
-                <TableRow key={metric.timestamp}>
+                <TableRow
+                  key={metric.timestamp}
+                  className="data-grid__data-row"
+                >
                   <TableCell className="font-medium">
                     {dateTimeFormatter(new Date(metric.timestamp))}
                   </TableCell>

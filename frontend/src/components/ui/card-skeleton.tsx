@@ -20,7 +20,7 @@ export function StatusCardSkeleton() {
 
 export function MetricsCardSkeleton() {
   return (
-    <Card className="bg-card gap-4 shadow-sm">
+    <Card className="metrics-card__skeleton bg-card gap-4 shadow-sm">
       <CardHeader>
         <div className="flex items-center gap-2">
           <Skeleton className="h-5 w-5" />
